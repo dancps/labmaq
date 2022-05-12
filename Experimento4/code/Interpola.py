@@ -94,9 +94,9 @@ def experimento_4(Xm, Rf, R1, R2, X1, X2=None, base="experimento", save=False ,d
     cosfi=np.cos(angle(Ia)) # a fase da tensão é a referência
     if save:
         # # graficos em funcao da velocidade angular(pu)
-        plt.figure()
-        plt.title("Ia(A) x rotação")
+        plt.figure(figsize=[6.4,9])
         plt.subplot(2,1,1)
+        plt.title("Ia(A) x rotação")
         plt.plot(rotacao,ModIa)
         plt.grid()
         plt.xlabel('Rotação [RPM]')
@@ -273,6 +273,69 @@ def main():
     df = pd.DataFrame(dict_750).T
     print(tabulate.tabulate(df,headers=df.columns, tablefmt="psql"))
     
+    print("+ Item 6")
+    Xm = 10.03
+    Rf = 58.04
+    R1 = 3.9
+    R2 = 28
+    X1 = 1.95
+    rotacao_reostato, ModIa_reostato, cosfi_reostato, Rendimento_reostato, Tele_reostato, Pmec_reostato = experimento_4(Xm, Rf, R1, R2, X1, base="reost", save=True) 
+
+    
+    base = "compare_all"
+    # # graficos em funcao da velocidade angular(pu)
+    plt.figure(figsize=[6.4,9])
+    plt.subplot(2,1,1)
+    plt.title("Ia(A) x rotação")
+    # plt.plot(rotacao_aurio,ModIa_aurio, label="Aurio")
+    plt.plot(rotacao_ieee,ModIa_ieee, label="IEEE")
+    plt.plot(rotacao_reostato,ModIa_reostato, label="IEEE (Reostato)")
+    plt.grid()
+    plt.xlabel('Rotação [RPM]')
+    plt.ylabel("Corrente de alimentação [A]")
+    plt.subplot(2,1,2)
+    # plt.plot(rotacao_aurio,cosfi_aurio, label="Aurio")
+    plt.plot(rotacao_ieee,cosfi_ieee, label="IEEE")
+    plt.plot(rotacao_reostato,cosfi_reostato, label="IEEE (Reostato)")
+    plt.title("cos(fi)x rotação")
+    plt.grid()
+    plt.xlabel('Rotação [RPM]')
+    plt.ylabel("cos(fi)")
+    plt.legend()
+    plt.savefig(f"img/{base}_Ia.png")
+
+    plt.figure()
+    # plt.plot(rotacao_aurio,Rendimento_aurio, label="Aurio")
+    plt.plot(rotacao_ieee,Rendimento_ieee, label="IEEE")
+    plt.plot(rotacao_reostato,Rendimento_reostato, label="IEEE (Reostato)")
+    plt.title("Rendimento x rotação")
+    plt.grid()
+    plt.xlabel('Rotação [RPM]')
+    plt.ylabel("Rendimento")
+    plt.legend()
+    plt.savefig(f"img/{base}_Rendimento.png")
+
+    plt.figure()
+    # plt.plot(rotacao_aurio,Tele_aurio, label="Aurio")
+    plt.plot(rotacao_ieee,Tele_ieee, label="IEEE")
+    plt.plot(rotacao_reostato,Tele_reostato, label="IEEE (Reostato)")
+    plt.title("Torque motor x rotação")
+    plt.grid()
+    plt.xlabel('Rotação [RPM]')
+    plt.ylabel("Torque [Nm]")
+    plt.legend()
+    plt.savefig(f"img/{base}_Torque.png")
+
+    plt.figure()
+    # plt.plot(rotacao_aurio,Pmec_aurio, label="Aurio")
+    plt.plot(rotacao_ieee,Pmec_ieee, label="IEEE")
+    plt.plot(rotacao_reostato,Pmec_reostato, label="IEEE (Reostato)")
+    plt.title("Potencia Convertida x rotação")
+    plt.grid()
+    plt.xlabel('Rotação [RPM]')
+    plt.ylabel("Potencia Convertida [W]")
+    plt.legend()
+    plt.savefig(f"img/{base}_Potencia.png")
 
 if __name__=="__main__":
     main()
